@@ -26,11 +26,11 @@
     </p>
     <h2 class="text-center mt-4 mb-4">Places to visit in Kyiv:</h2>
     <p>
-      <ul class="lead">
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</li>
-        <li>Ipsum dolor sit amet consectetur</li>
-        <li>Viverra nam libero justo laoreet sit amet cursus sit amet</li>
-      </ul>
+      <div>
+      {% for place in places %}
+        {% include "placeitem.html" %}
+      {% endfor %}
+      </div>
     </p>
     <div class="text-center">
     <button type="button" class="btn btn-success mt-4 mb-4">Contact us!</button>
