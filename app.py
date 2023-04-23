@@ -1,29 +1,27 @@
 from flask import Flask, render_template, jsonify
+from database import engine
+from sqlalchemy import text
 
 app = Flask(__name__)
 
-PLACES = [{
-  "id": 1,
-  "title": "Khreschatyk",
-  "meaning": "Heart of Kyiv"
-}, {
-  "id": 2,
-  "title": "Kyiv-Pechersk Lavra",
-  "meaning": "Soul of Kyiv"
-}, {
-  "id": 3,
-  "title": "Hidropark",
-  "meaning": "Health of Kyiv"
-}]
-
+def load_places_from_db():
+  with engine.connect() as conn:
+    result = conn.execute(text("select * from places"))
+  column_names = result.keys()
+  result_dicts = []
+  for row in result.all():
+    result_dicts.append(dict(zip(column_names, row)))
+  return result_dicts
 
 @app.route("/")
 def hello_kyiv():
-  return render_template("home.html", places=PLACES)
+  places = load_places_from_db()
+  return render_template("home.html", places=places)
 
 @app.route("/places")
 def list_places():
-  return jsonify(PLACES)
+  places_json = load_places_from_db()
+  return jsonify(places_json)
 
 
 if __name__ == "__main__":
